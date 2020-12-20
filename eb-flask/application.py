@@ -1,40 +1,16 @@
 from flask import Flask, request, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
+from models import setup_db, CarsModel
+
 
 application = Flask(__name__)
-
-
-database_name = ""
-database_path ="postgres://{}:{}@{}/{}".format('postgres', 'postgres','flask-db.csljbjej7s5s.us-west-2.rds.amazonaws.com', database_name)
-
-application.config["SQLALCHEMY_DATABASE_URI"] = database_path
-application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-db = SQLAlchemy(application)
-#migrate = Migrate(application, db)
+setup_db(application)
 
 
 
-class CarsModel(db.Model):
-    __tablename__ = 'cars'
 
-    id = db.Column(db.Integer, primary_key=True)
-    brand = db.Column(db.String())
-    model = db.Column(db.String())
-    doors = db.Column(db.Integer())
 
-    def __init__(self, brand, model, doors):
-        self.brand = brand
-        self.model = model
-        self.doors = doors
-
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def __repr__(self):
-        return f"<Car {self.brand}>"
 
 
 @application.route('/')
@@ -76,6 +52,41 @@ def add_cars():
     except:
         abort(422)
 
+
+@application.route('/cars/<int:car_id>', methods=['PATCH'])
+def update_cars(car_id):
+    body = request.get_json()
+
+
+    try:
+        car = CarsModel.query.filter(CarsModel.id==car_id).one_or_none()
+        print(car)
+        if car is None:
+            abort(404)
+        print(1)
+        
+        if 'brand' in body:
+            car.brand = body.get('brand')
+        if 'model' in body:
+            car.model = body.get('model')
+        if 'doors' in body:
+            car.doors = body.get('doors')
+        print(2)
+        car.update()
+
+
+        #selection = Book.query.order_by(Book.id).all()
+        #current_books = paginate_books(request, selection)
+
+        return jsonify({
+            'success': True,
+            'update': car.id,
+            #'books': current_books,
+            #'total_books': len(Book.query.all())
+        })
+
+    except:
+        abort(422)
 
 
 #if __name__ == '__main__':
