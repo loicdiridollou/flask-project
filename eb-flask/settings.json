@@ -1,10 +1,6 @@
 {
-    "python.linting.flake8Path": "${workspaceRoot}/venv/bin/flake8",
-    "python.linting.flake8Enabled": true,
-    "python.linting.pylintEnabled": false,
-    "python.linting.flake8Args": [
-        "--disable=E402",
-        "--max-line-length=120"
-    ],
-    "python.linting.pylintArgs": ["--load-plugins", "pylint_flask"]
+    "python.linting.pylintArgs": [
+        "--load-plugins",
+        "pylint-flask"
+    ]
 }
