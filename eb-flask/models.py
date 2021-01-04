@@ -14,20 +14,23 @@ def setup_db(app, database_path=database_path):
     db.app = app
     db.init_app(app)
     db.create_all()
+    return db
 
 
-class CarsModel(db.Model):
-    __tablename__ = 'cars'
+class VehicleModel(db.Model):
+    __tablename__ = 'vehicles'
 
     id = db.Column(db.Integer, primary_key=True)
     brand = db.Column(db.String())
     model = db.Column(db.String())
     doors = db.Column(db.Integer())
+    vehicle_type = db.Column(db.String())
 
-    def __init__(self, brand, model, doors):
+    def __init__(self, brand, model, doors, vehicle_type):
         self.brand = brand
         self.model = model
         self.doors = doors
+        self.vehicle_type = vehicle_type
 
     def insert(self):
         db.session.add(self)
@@ -41,4 +44,4 @@ class CarsModel(db.Model):
         db.session.commit()
 
     def __repr__(self):
-        return f"<Car {self.brand}>"
+        return f"<Vehicle {self.brand}>"
