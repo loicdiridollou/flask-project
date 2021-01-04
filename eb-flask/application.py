@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
 from models import setup_db, VehicleModel
@@ -24,7 +24,7 @@ def cars():
 
 
 @application.route('/vehicles/<string:vehicle_type>')
-def vheicles_by_type(vehicle_type):
+def vehicles_by_type(vehicle_type):
     vehicles = VehicleModel.query.filter(VehicleModel.vehicle_type==vehicle_type).all()
     dic = {}
     for vehicle in vehicles:
@@ -63,7 +63,6 @@ def add_cars():
 def update_cars(vehicle_id):
     body = request.get_json()
 
-
     try:
         vehicle = VehicleModel.query.filter(VehicleModel.id==vehicle_id).one_or_none()
         
@@ -95,6 +94,12 @@ def update_cars(vehicle_id):
 
     except:
         abort(422)
+
+
+
+@application.route('/render')
+def render_temp():
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
