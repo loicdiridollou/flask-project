@@ -1,43 +1,49 @@
 from flask import Flask, request, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
-from models import setup_db, CarsModel
+from models import setup_db, VehicleModel
 
 
 application = Flask(__name__)
-setup_db(application)
+db = setup_db(application)
 
-
-
-
-
-
+migrate = Migrate(application, db)
 
 @application.route('/')
 def hello():
     return 'Hello world!'
 
 
-@application.route('/cars')
+@application.route('/vehicles')
 def cars():
-    cars = CarsModel.query.all()
+    cars = VehicleModel.query.all()
     dic = {}
     for car in cars:
         dic[car.id] = {'brand': car.brand, 'model': car.model, 'num_doors': car.doors}
     return jsonify(dic)
 
 
-@application.route('/cars', methods=['POST'])
+@application.route('/vehicles/<string:vehicle_type>')
+def vheicles_by_type(vehicle_type):
+    vehicles = VehicleModel.query.filter(VehicleModel.vehicle_type==vehicle_type).all()
+    dic = {}
+    for vehicle in vehicles:
+        dic[vehicle.id] = {'brand': vehicle.brand, 'model': vehicle.model, 'num_doors': vehicle.doors, 'vehicle_type': vehicle.vehicle_type}
+    return jsonify(dic)
+
+
+@application.route('/vehicles', methods=['POST'])
 def add_cars():
     body = request.get_json()
 
     new_brand = body.get('brand', None)
     new_model = body.get('model', None)
     new_doors = body.get('doors', None)
+    new_type = body.get('type', None)
 
     try:
-        car = CarsModel(brand=new_brand, model=new_model, doors=new_doors)
-        car.insert()
+        vehicle = VehicleModel(brand=new_brand, model=new_model, doors=new_doors, vehicle_type=new_type)
+        vehicle.insert()
 
         #selection = Book.query.order_by(Book.id).all()
         #current_books = paginate_books(request, selection)
@@ -53,26 +59,28 @@ def add_cars():
         abort(422)
 
 
-@application.route('/cars/<int:car_id>', methods=['PATCH'])
-def update_cars(car_id):
+@application.route('/vehicles/<int:vehicle_id>', methods=['PATCH'])
+def update_cars(vehicle_id):
     body = request.get_json()
 
 
     try:
-        car = CarsModel.query.filter(CarsModel.id==car_id).one_or_none()
-        print(car)
-        if car is None:
+        vehicle = VehicleModel.query.filter(VehicleModel.id==vehicle_id).one_or_none()
+        
+        if vehicle is None:
             abort(404)
-        print(1)
+       
         
         if 'brand' in body:
-            car.brand = body.get('brand')
+            vehicle.brand = body.get('brand')
         if 'model' in body:
-            car.model = body.get('model')
+            vehicle.model = body.get('model')
         if 'doors' in body:
-            car.doors = body.get('doors')
-        print(2)
-        car.update()
+            vehicle.doors = body.get('doors')
+        if 'type' in body:
+            vehicle.vehicle_type = body.get('type', None)
+
+        vehicle.update()
 
 
         #selection = Book.query.order_by(Book.id).all()
@@ -80,7 +88,7 @@ def update_cars(car_id):
 
         return jsonify({
             'success': True,
-            'update': car.id,
+            'update': vehicle.id,
             #'books': current_books,
             #'total_books': len(Book.query.all())
         })
@@ -89,5 +97,5 @@ def update_cars(car_id):
         abort(422)
 
 
-#if __name__ == '__main__':
-#    application.run(debug=True, port=5000)
+if __name__ == '__main__':
+    application.run(debug=True, port=5000)
