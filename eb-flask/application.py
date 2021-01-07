@@ -1,11 +1,14 @@
 from flask import Flask, request, jsonify, abort, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
-from models import setup_db, VehicleModel
+from models import VehicleModel, setup_db
+from flask_mysqldb import MySQL
 
 
 application = Flask(__name__)
 db = setup_db(application)
+
+
 
 migrate = Migrate(application, db)
 
