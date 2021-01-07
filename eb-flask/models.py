@@ -4,7 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 
 database_name = ""
-database_path ="postgres://{}:{}@{}/{}".format('postgres', 'postgres','flask-db.csljbjej7s5s.us-west-2.rds.amazonaws.com', database_name)
+#database_path ="postgres://{}:{}@{}/{}".format('postgres', 'postgres','flask-db.csljbjej7s5s.us-west-2.rds.amazonaws.com', database_name)
+database_path = 'mysql+pymysql://flask:abcd1234@@localhost/flask_tutorial'
 
 db = SQLAlchemy()
 
@@ -17,14 +18,15 @@ def setup_db(app, database_path=database_path):
     return db
 
 
+
 class VehicleModel(db.Model):
     __tablename__ = 'vehicles'
 
     id = db.Column(db.Integer, primary_key=True)
-    brand = db.Column(db.String())
-    model = db.Column(db.String())
+    brand = db.Column(db.String(255))
+    model = db.Column(db.String(255))
     doors = db.Column(db.Integer())
-    vehicle_type = db.Column(db.String())
+    vehicle_type = db.Column(db.String(255))
 
     def __init__(self, brand, model, doors, vehicle_type):
         self.brand = brand
