@@ -18,8 +18,7 @@ def setup_db(app, database_path=database_path):
     return db
 
 
-
-class VehicleModel(db.Model):
+class Vehicle(db.Model):
     __tablename__ = 'vehicles'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -47,3 +46,66 @@ class VehicleModel(db.Model):
 
     def __repr__(self):
         return f"<Vehicle {self.brand}>"
+
+
+class Utilization(db.Model):
+    __tablename__ = 'utilizations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    ref_vehicle = db.Column(db.Integer())
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    start_time = db.Column(db.DateTime())
+    end_time = db.Column(db.DateTime())
+    
+
+    def __init__(self, ref_vehicle, start_time, end_time):
+        self.ref_vehicle = ref_vehicle
+        self.start_time = start_time
+        self.end_time = end_time
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def __repr__(self):
+        return f"<Vehicle {self.brand}>"
+
+
+class User(db.Model):
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(255))
+    name = db.Column(db.String(255))
+    enrollment_time = db.Column(db.DateTime())
+    level = db.Column(db.String(255))
+
+    utilizations = db.relationship('Utilization', backref="user", lazy="select")
+
+
+    def __init__(self, username, name, enrollment_time, level):
+        self.username = username
+        self.name = name
+        self.enrollment_time = enrollment_time
+        self.level = level
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def __repr__(self):
+        return f"<User {self.name}>"
