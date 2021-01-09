@@ -22,18 +22,20 @@ def reset_db():
     db.session.add(Vehicle(brand="Volvo", model="XNR Electric", doors=2, vehicle_type="truck"))
     db.session.add(Vehicle(brand="Freightliner", model="eCascadia", doors=2, vehicle_type="truck"))
 
-    u1 = User(username="jean_dupont", name="Jean Dupont", enrollment_time=dt.datetime(2020, 1, 5, 12, 30), level="manager")
-    u2 = User(username="marc_lhermitte", name="Marc L'Hermitte", enrollment_time=dt.datetime(2020, 1, 5, 12, 30), level="employee")
-    u3 = User(username="jeanmichel_serre", name="Jean-Michel Serre", enrollment_time=dt.datetime(2020, 1, 5, 12, 30), level="manager")
-    u4 = User(username="kevin_chan", name="Kevin Chan", enrollment_time=dt.datetime(2020, 1, 5, 12, 30), level="employee")
+    u1 = User(username="jean_dupont", name="Jean Dupont", enrolment_time=dt.datetime(2020, 1, 5, 12, 30), level="manager")
+    u2 = User(username="marc_lhermitte", name="Marc L'Hermitte", enrolment_time=dt.datetime(2020, 1, 5, 12, 30), level="employee")
+    u3 = User(username="jeanmichel_serre", name="Jean-Michel Serre", enrolment_time=dt.datetime(2020, 1, 5, 12, 30), level="manager")
+    u4 = User(username="kevin_chan", name="Kevin Chan", enrolment_time=dt.datetime(2020, 1, 5, 12, 30), level="employee")
     db.session.add(u1)
     db.session.add(u2)
     db.session.add(u3)
     db.session.add(u4)
     
+    
     util1 = Utilization(ref_vehicle=1, start_time=dt.datetime(2020, 6, 5, 12, 30), end_time=dt.datetime(2020, 6, 6, 12, 30))
+    util1.user = u2
     db.session.add(util1)
-    util1.user_id.append(u2)
+    #util1.user_id.append(u2)
     
     
     # db.session.add(Utilization(ref_vehicle=2, user_id=3, start_time=dt.datetime(2020, 6, 6, 12, 30), end_time=dt.datetime(2020, 6, 8, 12, 30)))
@@ -64,17 +66,18 @@ def list_utilizations():
     utilizations = Utilization.query.all()
     dic = {}
     for use in utilizations:
-        dic[car.id] = {'vehicle': use.ref_vehicle, 'user': use.user_id, 'start_time': use.start_time, 'end_time': use.end_time}
+        user = User.query.filter(User.id==use.user_id).one_or_none()
+        dic[use.id] = {'vehicle': use.ref_vehicle, 'user': user.name, 'start_time': use.start_time, 'end_time': use.end_time}
     return jsonify(dic)
 
 
 
 @application.route('/users')
 def list_users():
-    cars = Vehicle.query.all()
+    users = User.query.all()
     dic = {}
-    for car in cars:
-        dic[car.id] = {'brand': car.brand, 'model': car.model, 'num_doors': car.doors}
+    for user in users:
+        dic[user.id] = {'name': user.name, 'username': user.username, 'level': user.level, "enrolment date": user.enrolment_time}
     return jsonify(dic)
 
 
