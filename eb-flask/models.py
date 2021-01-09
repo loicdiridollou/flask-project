@@ -56,6 +56,8 @@ class Utilization(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     start_time = db.Column(db.DateTime())
     end_time = db.Column(db.DateTime())
+
+    user = db.relationship('User', backref="user", lazy=True)
     
 
     def __init__(self, ref_vehicle, start_time, end_time):
@@ -84,16 +86,14 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255))
     name = db.Column(db.String(255))
-    enrollment_time = db.Column(db.DateTime())
+    enrolment_time = db.Column(db.DateTime())
     level = db.Column(db.String(255))
 
-    utilizations = db.relationship('Utilization', backref="user", lazy="select")
 
-
-    def __init__(self, username, name, enrollment_time, level):
+    def __init__(self, username, name, enrolment_time, level):
         self.username = username
         self.name = name
-        self.enrollment_time = enrollment_time
+        self.enrolment_time = enrolment_time
         self.level = level
 
     def insert(self):
