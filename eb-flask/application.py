@@ -35,13 +35,14 @@ def reset_db():
     util1 = Utilization(ref_vehicle=1, start_time=dt.datetime(2020, 6, 5, 12, 30), end_time=dt.datetime(2020, 6, 6, 12, 30))
     util1.user = u2
     db.session.add(util1)
-    #util1.user_id.append(u2)
     
-    
-    # db.session.add(Utilization(ref_vehicle=2, user_id=3, start_time=dt.datetime(2020, 6, 6, 12, 30), end_time=dt.datetime(2020, 6, 8, 12, 30)))
-    # db.session.add(Utilization(ref_vehicle=4, user_id=1, start_time=dt.datetime(2020, 6, 8, 12, 30), end_time=dt.datetime(2020, 6, 9, 12, 30)))
+    util2 = Utilization(ref_vehicle=2, start_time=dt.datetime(2020, 6, 6, 12, 30), end_time=dt.datetime(2020, 6, 8, 12, 30))
+    util2.user = u3
+    db.session.add(util2)
 
-    
+    util3 = Utilization(ref_vehicle=4, start_time=dt.datetime(2020, 6, 8, 12, 30), end_time=dt.datetime(2020, 6, 9, 12, 30))
+    util3.user = u1
+    db.session.add(util3)    
 
     db.session.commit()
 
@@ -67,7 +68,7 @@ def list_utilizations():
     dic = {}
     for use in utilizations:
         user = User.query.filter(User.id==use.user_id).one_or_none()
-        dic[use.id] = {'vehicle': use.ref_vehicle, 'user': user.name, 'start_time': use.start_time, 'end_time': use.end_time}
+        dic[use.id] = {'vehicle': use.ref_vehicle, 'user': user.username, 'start_time': use.start_time, 'end_time': use.end_time}
     return jsonify(dic)
 
 
