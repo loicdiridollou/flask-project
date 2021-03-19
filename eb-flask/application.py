@@ -43,7 +43,7 @@ def reset_db():
     util3 = Utilization(ref_vehicle=4, start_time=dt.datetime(2020, 6, 8, 12, 30), end_time=dt.datetime(2020, 6, 9, 12, 30))
     util3.user = u1
     db.session.add(util3)    
-
+    
     db.session.commit()
 
     
@@ -58,7 +58,7 @@ def list_cars():
     cars = Vehicle.query.all()
     dic = {}
     for car in cars:
-        dic[car.id] = {'brand': car.brand, 'model': car.model, 'num_doors': car.doors}
+        dic[car.id] = {'brand': car.brand, 'model': car.model, 'num_doors': car.doors, 'type': car.vehicle_type}
     return jsonify(dic)
 
 

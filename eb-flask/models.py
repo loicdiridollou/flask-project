@@ -5,7 +5,7 @@ import json
 
 database_name = ""
 #database_path ="postgres://{}:{}@{}/{}".format('postgres', 'postgres','flask-db.csljbjej7s5s.us-west-2.rds.amazonaws.com', database_name)
-database_path = 'mysql+pymysql://flask:abcd1234@@localhost/flask_tutorial'
+database_path = 'mysql+pymysql://flask:Mypass1234_$*@localhost/flask_tutorial'
 
 db = SQLAlchemy()
 
