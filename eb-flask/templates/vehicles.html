@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Flask Template Example</title>
+</head>
+
+<body>
+    <div>
+        <p>{{ cars }}</p>
+
+        <!-- <p>{{ contacts }}</p> -->
+        <p>My vehicles:</p>
+        <ul>
+            {% for car in cars %}
+            <li>{{ car.brand, car.model }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+
+</html>
