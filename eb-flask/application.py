@@ -57,10 +57,12 @@ def hello():
 def list_cars():
     cars = Vehicle.query.all()
     dic = {}
+    """
     for car in cars:
         dic[car.id] = {'brand': car.brand, 'model': car.model, 'num_doors': car.doors, 'type': car.vehicle_type}
     return jsonify(dic)
-
+    """
+    return render_template('vehicles.html', cars=cars)
 
 @application.route('/utilizations')
 def list_utilizations():
