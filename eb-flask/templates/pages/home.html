@@ -1,0 +1,35 @@
+{% extends 'layouts/main.html' %}
+{% block title %}RoadManager 1.0{% endblock %}
+{% block content %}
+<div class="row">
+	<div class="col-sm-6">
+		<h1>RoadManager 1.0 🔥</h1>
+		<p class="lead">Where organization meets the road.</p>
+		<h3>
+			<a href="/vehicles"><button class="btn btn-primary btn-lg">Find a vehicle</button></a>
+			<a href="/vehicles/create"><button class="btn btn-default btn-lg">Add a vehicle</button></a>
+		</h3>
+		<h3>
+			<a href="/users"><button class="btn btn-primary btn-lg">Find a user</button></a>
+			<a href="/users/create"><button class="btn btn-default btn-lg">Add a user</button></a>
+		</h3>
+		<p class="lead">Add a vehicle utilization</p>
+		<h3>
+			<a href="/utilizations/create"><button class="btn btn-default btn-lg">Add a utilization</button></a>
+		</h3>
+		<p class="lead">Recently used vehicles</p>
+<!-- 		
+		{% for artist in artists %}
+			<a href="/artists/{{ artist.id }}">
+				
+					<h5>{{ artist.name }}</h5>
+				
+			</a>
+		{% endfor %}
+		 -->
+	</div>
+	<div class="col-sm-6 hidden-sm hidden-xs">
+		<img id="front-splash" src="{{ url_for('static',filename='img/front-splash.jpg') }}" alt="Front Photo of Musical Band" />
+	</div>
+</div>
+{% endblock %}
