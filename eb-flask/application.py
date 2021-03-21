@@ -1,13 +1,15 @@
-from flask import Flask, request, jsonify, abort, render_template
+from flask import Flask, render_template, request, Response, flash, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
 from models import Vehicle, Utilization, User, setup_db
 import datetime as dt
-#from flask_mysqldb import MySQL
+from forms import *
+
 
 
 application = Flask(__name__)
 db = setup_db(application)
+application.config.from_object('config')
 
 migrate = Migrate(application, db)
 
@@ -55,7 +57,7 @@ def hello():
 
 
 @application.route('/vehicles')
-def list_cars():
+def vehicles():
     cars = Vehicle.query.all()
     dic = {}
     """
@@ -63,10 +65,10 @@ def list_cars():
         dic[car.id] = {'brand': car.brand, 'model': car.model, 'num_doors': car.doors, 'type': car.vehicle_type}
     return jsonify(dic)
     """
-    return render_template('vehicles.html', cars=cars)
+    return render_template('pages/vehicles.html', vehicles=cars)
 
 @application.route('/utilizations')
-def list_utilizations():
+def utilizations():
     utilizations = Utilization.query.all()
     dic = {}
     for use in utilizations:
@@ -77,13 +79,17 @@ def list_utilizations():
 
 
 @application.route('/users')
-def list_users():
+def users():
     users = User.query.all()
     dic = {}
     for user in users:
         dic[user.id] = {'name': user.name, 'username': user.username, 'level': user.level, "enrolment date": user.enrolment_time}
     return jsonify(dic)
 
+@application.route('/users/create', methods=['GET'])
+def create_user():
+    form = UserForm()
+    return render_template('forms/new_venue.html', form=form)
 
 @application.route('/users/search')
 def search_user():
