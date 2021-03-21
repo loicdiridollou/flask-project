@@ -50,7 +50,8 @@ def reset_db():
 
 @application.route('/')
 def hello():
-    return 'Hello world!'
+    return render_template('pages/home.html')
+
 
 
 @application.route('/vehicles')
@@ -81,6 +82,12 @@ def list_users():
     dic = {}
     for user in users:
         dic[user.id] = {'name': user.name, 'username': user.username, 'level': user.level, "enrolment date": user.enrolment_time}
+    return jsonify(dic)
+
+
+@application.route('/users/search')
+def search_user():
+    dic = {}
     return jsonify(dic)
 
 
