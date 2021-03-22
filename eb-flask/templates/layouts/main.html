@@ -78,9 +78,9 @@
             </li>
           </ul>
           <ul class="nav navbar-nav">
-            <li {% if request.endpoint == 'vehicles' %} class="active" {% endif %}><a href="#">Vehicles</a></li> 
-            <li {% if request.endpoint == 'utilizations' %} class="active" {% endif %}><a href="#">Utilizations</a></li>
-            <li {% if request.endpoint == 'users' %} class="active" {% endif %}><a href="#">Users<a></li>
+            <li {% if request.endpoint == 'vehicles' %} class="active" {% endif %}><a href="{{ url_for('vehicles') }}">Vehicles</a></li> 
+            <li {% if request.endpoint == 'utilizations' %} class="active" {% endif %}><a href="{{ url_for('utilizations') }}">Utilizations</a></li>
+            <li {% if request.endpoint == 'users' %} class="active" {% endif %}><a href="{{ url_for('users') }}">Users<a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
