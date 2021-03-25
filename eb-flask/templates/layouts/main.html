@@ -80,7 +80,7 @@
           <ul class="nav navbar-nav">
             <li {% if request.endpoint == 'vehicles' %} class="active" {% endif %}><a href="{{ url_for('vehicles') }}">Vehicles</a></li> 
             <li {% if request.endpoint == 'utilizations' %} class="active" {% endif %}><a href="{{ url_for('utilizations') }}">Utilizations</a></li>
-            <li {% if request.endpoint == 'users' %} class="active" {% endif %}><a href="{{ url_for('users') }}">Users<a></li>
+            <li {% if request.endpoint == 'users' %} class="active" {% endif %}><a href="{{ url_for('users') }}">Users</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -108,7 +108,7 @@
 
   <div id="footer">
     <div class="container">
-      <p>Fyyur &copy; All Rights Reserved.</p>
+      <p>RoadManager &copy; All Rights Reserved.</p>
       {% block footer %}{% endblock %}
     </div>
   </div>
