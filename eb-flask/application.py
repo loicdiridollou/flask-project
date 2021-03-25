@@ -49,55 +49,34 @@ def reset_db():
     db.session.commit()
 
     
+#######################################################
+# Home endpoints
+#######################################################
 
 @application.route('/')
 def hello():
     return render_template('pages/home.html')
 
 
+#######################################################
+# Vehicle endpoints
+#######################################################
 
 @application.route('/vehicles')
 def vehicles():
     cars = Vehicle.query.all()
-    dic = {}
-    """
-    for car in cars:
-        dic[car.id] = {'brand': car.brand, 'model': car.model, 'num_doors': car.doors, 'type': car.vehicle_type}
-    return jsonify(dic)
-    """
     return render_template('pages/vehicles.html', vehicles=cars)
 
-@application.route('/utilizations')
-def utilizations():
-    utilizations = Utilization.query.all()
-    dic = {}
-    for use in utilizations:
-        user = User.query.filter(User.id==use.user_id).one_or_none()
-        dic[use.id] = {'vehicle': use.ref_vehicle, 'user': user.username, 'start_time': use.start_time, 'end_time': use.end_time}
-    return jsonify(dic)
 
+@application.route('/vehicles/<int:vehicle_id>')
+def vehicle_by_id(vehicle_id):
+    vehicle = Vehicle.query.filter(Vehicle.id==vehicle_id).one()
+    dic = {'id': vehicle.id, 'brand': vehicle.brand, 'model': vehicle.model, 'num_doors': vehicle.doors, 'vehicle_type': vehicle.vehicle_type}
+    return render_template('pages/show_vehicle.html', vehicle=dic)
 
+ 
 
-@application.route('/users')
-def users():
-    users = User.query.all()
-    dic = {}
-    for user in users:
-        dic[user.id] = {'name': user.name, 'username': user.username, 'level': user.level, "enrolment date": user.enrolment_time}
-    return jsonify(dic)
-
-@application.route('/users/create', methods=['GET'])
-def create_user():
-    form = UserForm()
-    return render_template('forms/new_venue.html', form=form)
-
-@application.route('/users/search')
-def search_user():
-    dic = {}
-    return jsonify(dic)
-
-
-@application.route('/vehicles/<string:vehicle_type>')
+@application.route('/vehicles/type/<string:vehicle_type>')
 def vehicles_by_type(vehicle_type):
     vehicles = Vehicle.query.filter(Vehicle.vehicle_type==vehicle_type).all()
     dic = {}
@@ -131,6 +110,44 @@ def add_cars():
 
     except:
         abort(422)
+
+
+@application.route('/vehicles/create', methods=['GET'])
+def create_vehicle_form():
+  form = VehicleForm()
+  return render_template('forms/new_vehicle.html', form=form)
+
+
+@application.route('/vehicles/create', methods=["POST"])
+def create_vehicle():
+    error = False
+    try:
+        name = request.form['name']
+        genres = ','.join(request.form.getlist('genres'))
+        city = request.form['city']
+        address = request.form['address']
+        state =  request.form['state']
+        phone = request.form['phone']
+        fb_link = request.form['facebook_link']
+        img_link = request.form['image_link']
+        seeking_talent = request.form['seeking_talent'] == 'Yes'
+        seeking_description = request.form['seeking_description']
+        website_link = request.form['website_link']
+
+        print(request.form)
+    except:
+        error = True
+        #db.session.rollback()
+        flash('An error occurred. Venue ' + request.form['name'] + ' could not be listed.')
+    finally:
+        # on successful db insert, flash success
+        #if not error:
+        #flash('Venue ' + request.form['name'] + ' was successfully listed!')
+        # TODO: on unsuccessful db insert, flash an error instead.
+        # e.g., flash('An error occurred. Artist ' + data.name + ' could not be listed.')
+        #return render_template('pages/home.html')
+        return jsonify(request.form)
+
 
 
 @application.route('/vehicles/<int:vehicle_id>', methods=['PATCH'])
@@ -167,6 +184,46 @@ def update_cars(vehicle_id):
 
     except:
         abort(422)
+
+
+
+#######################################################
+# Utilization endpoints
+#######################################################
+
+@application.route('/utilizations')
+def utilizations():
+    utilizations = Utilization.query.all()
+    dic = {}
+    for use in utilizations:
+        user = User.query.filter(User.id==use.user_id).one_or_none()
+        dic[use.id] = {'vehicle': use.ref_vehicle, 'user': user.username, 'start_time': use.start_time, 'end_time': use.end_time}
+    return jsonify(dic)
+
+
+#######################################################
+# User endpoints
+#######################################################
+
+@application.route('/users')
+def users():
+    users = User.query.all()
+    dic = {}
+    for user in users:
+        dic[user.id] = {'name': user.name, 'username': user.username, 'level': user.level, "enrolment date": user.enrolment_time}
+    return jsonify(dic)
+
+@application.route('/users/create', methods=['GET'])
+def create_user():
+    form = UserForm()
+    return render_template('forms/new_venue.html', form=form)
+
+@application.route('/users/search')
+def search_user():
+    dic = {}
+    return jsonify(dic)
+
+
 
 
 
