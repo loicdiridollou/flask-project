@@ -54,7 +54,7 @@ def reset_db():
 #######################################################
 
 @application.route('/')
-def hello():
+def index():
     return render_template('pages/home.html')
 
 
@@ -147,6 +147,15 @@ def create_vehicle():
         # e.g., flash('An error occurred. Artist ' + data.name + ' could not be listed.')
         #return render_template('pages/home.html')
         return jsonify(request.form)
+
+
+@application.route('/vehicles/<int:vehicle_id>/edit', methods=['GET'])
+def edit_vehicle_form(vehicle_id):
+  form = VehicleForm()
+  vehicle = Vehicle.query.filter(Vehicle.id == vehicle_id).one()
+  vehicle_dic =  {'id': vehicle.id, 'brand': vehicle.brand, 'model': vehicle.model, 'num_doors': vehicle.doors, 'vehicle_type': vehicle.vehicle_type}
+
+  return render_template('forms/edit_vehicle.html', form=form, vehicle=vehicle_dic)
 
 
 
