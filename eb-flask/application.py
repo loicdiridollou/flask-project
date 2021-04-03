@@ -71,7 +71,7 @@ def vehicles():
 @application.route('/vehicles/<int:vehicle_id>')
 def vehicle_by_id(vehicle_id):
     vehicle = Vehicle.query.filter(Vehicle.id==vehicle_id).one()
-    dic = {'id': vehicle.id, 'brand': vehicle.brand, 'model': vehicle.model, 'num_doors': vehicle.doors, 'vehicle_type': vehicle.vehicle_type}
+    dic = {'id': vehicle.id, 'brand': vehicle.brand, 'model': vehicle.model, 'num_doors': vehicle.doors, 'vtype': vehicle.vtype}
     return render_template('pages/show_vehicle.html', vehicle=dic)
 
  
@@ -81,7 +81,7 @@ def vehicles_by_type(vehicle_type):
     vehicles = Vehicle.query.filter(Vehicle.vehicle_type==vehicle_type).all()
     dic = {}
     for vehicle in vehicles:
-        dic[vehicle.id] = {'brand': vehicle.brand, 'model': vehicle.model, 'num_doors': vehicle.doors, 'vehicle_type': vehicle.vehicle_type}
+        dic[vehicle.id] = {'brand': vehicle.brand, 'model': vehicle.model, 'num_doors': vehicle.doors, 'vtype': vehicle.vtype}
     return jsonify(dic)
 
 
@@ -153,7 +153,14 @@ def create_vehicle():
 def edit_vehicle_form(vehicle_id):
   form = VehicleForm()
   vehicle = Vehicle.query.filter(Vehicle.id == vehicle_id).one()
-  vehicle_dic =  {'id': vehicle.id, 'brand': vehicle.brand, 'model': vehicle.model, 'num_doors': vehicle.doors, 'vehicle_type': vehicle.vehicle_type}
+  vehicle_dic =  {'id': vehicle.id, 
+                  'brand': vehicle.brand, 
+                  'model': vehicle.model, 
+                  'num_doors': vehicle.doors, 
+                  'vtype': vehicle.vtype,
+                  'year': vehicle.year,
+                  'licence': vehicle.licence,
+                  'transmission': vehicle.transmission}
 
   return render_template('forms/edit_vehicle.html', form=form, vehicle=vehicle_dic)
 
