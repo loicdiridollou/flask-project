@@ -24,8 +24,12 @@ class Vehicle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     brand = db.Column(db.String(255))
     model = db.Column(db.String(255))
+    year = db.Column(db.Integer())
     doors = db.Column(db.Integer())
-    vehicle_type = db.Column(db.String(255))
+    power = db.Column(db.Integer())
+    licence = db.Column(db.String(255))
+    transmission = db.Column(db.Integer())
+    vtype = db.Column(db.String(255))
 
     def __init__(self, brand, model, doors, vehicle_type):
         self.brand = brand
