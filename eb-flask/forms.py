@@ -17,17 +17,17 @@ class UtilizationForm(Form):
     )
 
 class VehicleForm(Form):
-    name = StringField(
-        'name', validators=[DataRequired()]
+    brand = StringField(
+        'brand', validators=[DataRequired()]
     )
-    city = StringField(
-        'city', validators=[DataRequired()]
+    model = StringField(
+        'model', validators=[DataRequired()]
     )
-    state = SelectField(
-        'state', validators=[DataRequired()],
+    year = SelectField(
+        'year', validators=[DataRequired()],
         choices=[
-            ('AL', 'AL'),
-            ('AK', 'AK'),
+            ('1980', 1980),
+            ('2010', 2010),
             ('AZ', 'AZ'),
             ('AR', 'AR'),
             ('CA', 'CA'),
@@ -79,58 +79,37 @@ class VehicleForm(Form):
             ('WY', 'WY'),
         ]
     )
-    address = StringField(
-        'address', validators=[DataRequired()]
+    num_doors = StringField(
+        'num_doors', validators=[DataRequired()]
     )
-    phone = StringField(
-        'phone'
-    )
-    image_link = StringField(
-        'image_link'
-    )
-    genres = SelectMultipleField(
-        # TODO implement enum restriction
-        'genres', validators=[DataRequired()],
+    vtype = SelectField(
+        'vtype', validators=[DataRequired()],
         choices=[
-            ('Alternative', 'Alternative'),
-            ('Blues', 'Blues'),
-            ('Classical', 'Classical'),
-            ('Country', 'Country'),
-            ('Electronic', 'Electronic'),
-            ('Folk', 'Folk'),
-            ('Funk', 'Funk'),
-            ('Hip-Hop', 'Hip-Hop'),
-            ('Heavy Metal', 'Heavy Metal'),
-            ('Instrumental', 'Instrumental'),
-            ('Jazz', 'Jazz'),
-            ('Musical Theatre', 'Musical Theatre'),
-            ('Pop', 'Pop'),
-            ('Punk', 'Punk'),
-            ('R&B', 'R&B'),
-            ('Reggae', 'Reggae'),
-            ('Rock n Roll', 'Rock n Roll'),
-            ('Soul', 'Soul'),
-            ('Other', 'Other'),
+            ('Sedan', 'Sedan'),
+            ('Coupe', 'Coupe'),
+            ('Hatchback', 'Hatchback'),
+            ('Sportcar', 'Sportcar'),
+            ('SUV', 'SUV'),
+            ('Convertible', 'Convertible'),
+            ('Truck', 'Truck'),
+            ('Motorcycle', 'Motorcycle')
         ]
     )
-    facebook_link = StringField(
-        'facebook_link', validators=[URL()]
+    licence = SelectMultipleField(
+        'licence', validators=[DataRequired()],
+        choices=[
+            ('Motorcycle', 'Motorcycle'),
+            ('Car', 'Car'),
+            ('Truck', 'Truck'),
+        ]
     )
-
-    seeking_description = StringField(
-        # TODO implement enum restriction
-        'seeking_description'
+    power = StringField(
+        'power', validators=[DataRequired()]
     )
-    seeking_talent = SelectField(
-        'seek_artist', validators=[DataRequired()],
-        choices = ['Yes', 'No'],
-        default = 'No'
+    transmission = StringField(
+        'transmission', validators=[DataRequired()]
     )
-
-    website_link = StringField(
-        # TODO implement enum restriction
-        'website_link', validators=[URL()]
-    )
+    
 
 class UserForm(Form):
     name = StringField(
