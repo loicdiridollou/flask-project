@@ -65,6 +65,7 @@ def index():
 @application.route('/vehicles')
 def vehicles():
     cars = Vehicle.query.all()
+    
     return render_template('pages/vehicles.html', vehicles=cars)
 
 
@@ -78,7 +79,8 @@ def vehicle_by_id(vehicle_id):
                   'vtype': vehicle.vtype,
                   'year': vehicle.year,
                   'licence': vehicle.licence,
-                  'transmission': vehicle.transmission}
+                  'transmission': vehicle.transmission,
+                  'category': vehicle.category}
     return render_template('pages/show_vehicle.html', vehicle=vehicle_dic)
 
  
@@ -91,6 +93,11 @@ def vehicles_by_type(vehicle_type):
         dic[vehicle.id] = {'brand': vehicle.brand, 'model': vehicle.model, 'num_doors': vehicle.doors, 'vtype': vehicle.vtype}
     return jsonify(dic)
 
+
+@application.route('/vehicles/create', methods=['GET'])
+def create_vehicle_form():
+  form = VehicleForm()
+  return render_template('forms/new_vehicle.html', form=form)
 
 @application.route('/vehicles/create', methods=['POST'])
 def add_cars():
@@ -117,14 +124,6 @@ def add_cars():
 
     except:
         abort(422)
-
-
-@application.route('/vehicles/create', methods=['GET'])
-def create_vehicle_form():
-  form = VehicleForm()
-  return render_template('forms/new_vehicle.html', form=form)
-
-
 
 
 
