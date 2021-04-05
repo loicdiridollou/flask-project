@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Response, flash, redirect, url_for, jsonify
+from flask import Flask, render_template, request, Response, flash, redirect, url_for, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
 from models import Vehicle, Utilization, User, setup_db
@@ -71,8 +71,15 @@ def vehicles():
 @application.route('/vehicles/<int:vehicle_id>')
 def vehicle_by_id(vehicle_id):
     vehicle = Vehicle.query.filter(Vehicle.id==vehicle_id).one()
-    dic = {'id': vehicle.id, 'brand': vehicle.brand, 'model': vehicle.model, 'num_doors': vehicle.doors, 'vtype': vehicle.vtype}
-    return render_template('pages/show_vehicle.html', vehicle=dic)
+    vehicle_dic =  {'id': vehicle.id, 
+                  'brand': vehicle.brand, 
+                  'model': vehicle.model, 
+                  'num_doors': vehicle.doors, 
+                  'vtype': vehicle.vtype,
+                  'year': vehicle.year,
+                  'licence': vehicle.licence,
+                  'transmission': vehicle.transmission}
+    return render_template('pages/show_vehicle.html', vehicle=vehicle_dic)
 
  
 
@@ -85,7 +92,7 @@ def vehicles_by_type(vehicle_type):
     return jsonify(dic)
 
 
-@application.route('/vehicles', methods=['POST'])
+@application.route('/vehicles/create', methods=['POST'])
 def add_cars():
     body = request.get_json()
 
@@ -118,58 +125,31 @@ def create_vehicle_form():
   return render_template('forms/new_vehicle.html', form=form)
 
 
-@application.route('/vehicles/create', methods=["POST"])
-def create_vehicle():
-    error = False
-    try:
-        name = request.form['name']
-        genres = ','.join(request.form.getlist('genres'))
-        city = request.form['city']
-        address = request.form['address']
-        state =  request.form['state']
-        phone = request.form['phone']
-        fb_link = request.form['facebook_link']
-        img_link = request.form['image_link']
-        seeking_talent = request.form['seeking_talent'] == 'Yes'
-        seeking_description = request.form['seeking_description']
-        website_link = request.form['website_link']
 
-        print(request.form)
-    except:
-        error = True
-        #db.session.rollback()
-        flash('An error occurred. Venue ' + request.form['name'] + ' could not be listed.')
-    finally:
-        # on successful db insert, flash success
-        #if not error:
-        #flash('Venue ' + request.form['name'] + ' was successfully listed!')
-        # TODO: on unsuccessful db insert, flash an error instead.
-        # e.g., flash('An error occurred. Artist ' + data.name + ' could not be listed.')
-        #return render_template('pages/home.html')
-        return jsonify(request.form)
 
 
 @application.route('/vehicles/<int:vehicle_id>/edit', methods=['GET'])
 def edit_vehicle_form(vehicle_id):
-  form = VehicleForm()
-  vehicle = Vehicle.query.filter(Vehicle.id == vehicle_id).one()
-  vehicle_dic =  {'id': vehicle.id, 
-                  'brand': vehicle.brand, 
-                  'model': vehicle.model, 
-                  'num_doors': vehicle.doors, 
-                  'vtype': vehicle.vtype,
-                  'year': vehicle.year,
-                  'licence': vehicle.licence,
-                  'transmission': vehicle.transmission}
+    form = VehicleForm()
+    vehicle = Vehicle.query.filter(Vehicle.id == vehicle_id).one()
+    vehicle_dic =  {'id': vehicle.id, 
+                    'brand': vehicle.brand, 
+                    'model': vehicle.model, 
+                    'num_doors': vehicle.doors, 
+                    'vtype': vehicle.vtype,
+                    'year': vehicle.year,
+                    'licence': vehicle.licence.split(', '),
+                    'power': vehicle.power,
+                    'transmission': vehicle.transmission}
 
-  return render_template('forms/edit_vehicle.html', form=form, vehicle=vehicle_dic)
+    return render_template('forms/edit_vehicle.html', form=form, vehicle=vehicle_dic)
 
 
 
-@application.route('/vehicles/<int:vehicle_id>', methods=['PATCH'])
+@application.route('/vehicles/<int:vehicle_id>/edit', methods=['POST'])
 def update_cars(vehicle_id):
-    body = request.get_json()
-
+    body = request.form
+    
     try:
         vehicle = Vehicle.query.filter(Vehicle.id==vehicle_id).one_or_none()
         
@@ -182,24 +162,21 @@ def update_cars(vehicle_id):
             vehicle.model = body.get('model')
         if 'doors' in body:
             vehicle.doors = body.get('doors')
-        if 'type' in body:
-            vehicle.vehicle_type = body.get('type', None)
-
+        if 'vtype' in body:
+            vehicle.vtype = body.get('vtype', None)
+        if 'licence' in body:
+            vehicle.licence = ', '.join(request.form.getlist('licence'))
+        if 'power' in body:
+            vehicle.power = body.get('power')
+        if 'year' in body:
+            vehicle.year = body.get('year')
+        if 'transmission' in body:
+            vehicle.transmission = body.get('transmission')
         vehicle.update()
-
-
-        #selection = Book.query.order_by(Book.id).all()
-        #current_books = paginate_books(request, selection)
-
-        return jsonify({
-            'success': True,
-            'update': vehicle.id,
-            #'books': current_books,
-            #'total_books': len(Book.query.all())
-        })
-
+        return redirect(url_for('vehicle_by_id', vehicle_id=vehicle_id))
     except:
         abort(422)
+
 
 
 
