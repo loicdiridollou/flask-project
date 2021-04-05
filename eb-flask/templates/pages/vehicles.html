@@ -6,7 +6,7 @@
 		{% for vec in vehicles %}
 		<li>
 			<a href="/vehicles/{{ vec.id }}">
-				<i class="fas fa-music"></i>
+				<i class="fas fa-{{ vec.category }}"></i>
 				<div class="item">
 					<h5>{{ vec.model }}</h5>
 				</div>
