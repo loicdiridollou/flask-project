@@ -30,6 +30,7 @@ class Vehicle(db.Model):
     licence = db.Column(db.String(255))
     transmission = db.Column(db.Integer())
     vtype = db.Column(db.String(255))
+    category = db.Column(db.String(255))    
 
     def __init__(self, brand, model, doors, vehicle_type):
         self.brand = brand
