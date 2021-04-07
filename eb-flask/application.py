@@ -112,9 +112,6 @@ def add_cars():
         vehicle = Vehicle(brand=new_brand, model=new_model, doors=new_doors, vehicle_type=new_type)
         vehicle.insert()
 
-        #selection = Book.query.order_by(Book.id).all()
-        #current_books = paginate_books(request, selection)
-
         return jsonify({
             'success': True,
             'created': car.id,
