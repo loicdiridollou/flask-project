@@ -64,9 +64,9 @@ def index():
 
 @application.route('/vehicles')
 def vehicles():
-    cars = Vehicle.query.all()
+    vecs = Vehicle.query.all()
     
-    return render_template('pages/vehicles.html', vehicles=cars)
+    return render_template('pages/vehicles.html', vehicles=vecs)
 
 
 @application.route('/vehicles/<int:vehicle_id>')
