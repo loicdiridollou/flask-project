@@ -101,27 +101,20 @@ def create_vehicle_form():
 
 @application.route('/vehicles/create', methods=['POST'])
 def add_cars():
-    body = request.get_json()
-
-    new_brand = body.get('brand', None)
-    new_model = body.get('model', None)
-    new_doors = body.get('doors', None)
-    new_type = body.get('type', None)
+    body = request.form
 
     try:
-        vehicle = Vehicle(brand=new_brand, model=new_model, doors=new_doors, vehicle_type=new_type)
+        vehicle = Vehicle(brand=body.get('brand', None), model=body.get('model', None),
+                          doors=body.get('doors', None), vtype=body.get('vtype', None),
+                          year = body.get('year', 0), power=body.get('power', 0),
+                          licence=body.get('licence', ''), transmission=body.get('transmission', ''), 
+                          category=body.get('category', ''))
         vehicle.insert()
-
-        return jsonify({
-            'success': True,
-            'created': car.id,
-            #'books': current_books,
-            #'total_books': len(Book.query.all())
-        })
-
+        
+        return redirect(url_for('vehicle_by_id', vehicle_id=vehicle.id))
+    
     except:
-        abort(422)
-
+        abort(422)    
 
 
 @application.route('/vehicles/<int:vehicle_id>/edit', methods=['GET'])
@@ -174,6 +167,24 @@ def update_cars(vehicle_id):
         abort(422)
 
 
+
+@application.route('/vehicles/<int:vehicle_id>', methods=["DELETE"])
+def delete_vehicle(vehicle_id):
+    error = False
+    try:
+        vehicle = Vehicle.query.filter(Vehicle.id==vehicle_id).one()
+        db.session.delete(vehicle)
+        db.session.commit()
+    except():
+        db.session.rollback()
+        error = True
+    finally:
+        db.session.close()
+    if error:
+        abort(500)
+    else:
+        return jsonify({'success': True})
+    
 
 
 #######################################################
