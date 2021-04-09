@@ -214,7 +214,14 @@ def users():
 @application.route('/users/<int:user_id>')
 def show_users(user_id):
     user = User.query.filter(User.id == user_id).one_or_none()
-    return render_template('pages/show_user.html', user=user)
+    data = {
+        'username': user.username,
+        'name': user.name,
+        'enrolment_time': user.enrolment_time,
+        'level': user.level,
+        'licences': user.licences.split(',')
+    }
+    return render_template('pages/show_user.html', user=data)
 
 
 
