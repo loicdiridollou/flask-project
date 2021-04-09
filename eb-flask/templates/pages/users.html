@@ -1,0 +1,17 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Fyyur | Users{% endblock %}
+{% block content %}
+<div class="row shows">
+    {%for user in users %}
+    <div class="col-sm-4">
+        <div class="tile tile-show">
+            <img src="https://i.ibb.co/zVxNYZj/index.jpg" alt="User Image" />
+            <h4>{{ user.name }}</h4>
+            <h5><a href="/users/{{ user.id }}">{{ user.username }}</a></h5>
+            <p>at the level of</p>
+            <h5>{{ user.level }}</h5>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
