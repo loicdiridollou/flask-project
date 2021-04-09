@@ -4,14 +4,14 @@
 <div class="row">
 	<div class="col-sm-6">
 		<h1 class="monospace">
-			{{ artist.name }}
+			{{ user.name }}
 		</h1>
 		<p class="subtitle">
-			ID: {{ artist.id }} <button class="edit-button" id = "edit-button", data-id="{{ artist.id }}" onclick="location.href = '/artists/{{ artist.id }}/edit'">Edit Artist</button> 
+			ID: {{ user.id }} <button class="edit-button" id = "edit-button", data-id="{{ user.id }}" onclick="location.href = '/users/{{ user.id }}/edit'">Edit Artist</button> 
 			
 		</p>
 		<div class="genres">
-			{% for genre in artist.genres %}
+			{% for licence in user.licences %}
 			<span class="genre">{{ genre }}</span>
 			{% endfor %}
 		</div>
