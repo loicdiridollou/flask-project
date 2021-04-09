@@ -32,11 +32,16 @@ class Vehicle(db.Model):
     vtype = db.Column(db.String(255))
     category = db.Column(db.String(255))    
 
-    def __init__(self, brand, model, doors, vehicle_type):
+    def __init__(self, brand, model, doors, vtype, year, power, licence, transmission, category):
         self.brand = brand
         self.model = model
         self.doors = doors
-        self.vehicle_type = vehicle_type
+        self.vtype = vtype
+        self.year = year
+        self.power = power
+        self.licence = licence
+        self.transmission = transmission
+        self.category = category
 
     def insert(self):
         db.session.add(self)
