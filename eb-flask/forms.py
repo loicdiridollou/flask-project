@@ -60,6 +60,14 @@ class VehicleForm(Form):
     transmission = StringField(
         'transmission', validators=[DataRequired()]
     )
+    category = SelectField(
+        'category', validators=[DataRequired()],
+        choices=[
+            ('car', 'Car'),
+            ('truck', 'Truck'),
+            ('motorcycle', 'Motorcycle')
+        ]
+    )
     
 
 class UserForm(Form):
