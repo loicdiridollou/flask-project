@@ -208,10 +208,15 @@ def utilizations():
 @application.route('/users')
 def users():
     users = User.query.all()
-    dic = {}
-    for user in users:
-        dic[user.id] = {'name': user.name, 'username': user.username, 'level': user.level, "enrolment date": user.enrolment_time}
-    return jsonify(dic)
+    return render_template('pages/users.html', users=users)
+
+
+@application.route('/users/<int:user_id>')
+def show_users(user_id):
+    user = User.query.filter(User.id == user_id).one_or_none()
+    return render_template('pages/show_user.html', user=user)
+
+
 
 @application.route('/users/create', methods=['GET'])
 def create_user():
