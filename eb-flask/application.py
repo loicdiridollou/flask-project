@@ -241,10 +241,23 @@ def edit_user(user_id):
 
 
 
-@application.route('/users/create', methods=['GET'])
+@application.route('/users/create', methods=['GET', 'POST'])
 def create_user():
-    form = UserForm()
-    return render_template('forms/new_user.html', form=form)
+    if request.method == "GET":
+        form = UserForm()
+        return render_template('forms/new_user.html', form=form)
+    elif request.method == "POST":
+        body = request.form
+        print(body)
+        user = User(username=body.get('username', None),
+                    name=body.get('name', None),
+                    enrolment_time=body.get('enrolment_time', None),
+                    level=body.get('level', None),
+                    licences=','.join(request.form.getlist('licences')),
+                    phone=body.get('phone', None))
+
+        user.insert()
+        return redirect(url_for('show_user', user_id=user.id))
 
 @application.route('/users/search')
 def search_user():
