@@ -1,0 +1,60 @@
+{% extends 'layouts/main.html' %}
+{% block title %}{{ user.name }} | User{% endblock %}
+{% block content %}
+<div class="row">
+	<div class="col-sm-6">
+		<h1 class="monospace">
+			{{ user.name }}
+		</h1>
+		<p class="subtitle">
+			ID: {{ user.id }} <button class="edit-button" id = "edit-button", data-id="{{ user.id }}" onclick="location.href = '/users/{{ user.id }}/edit'">Edit Artist</button> 
+			
+		</p>
+		<div class="genres">
+			{% for licence in user.licences %}
+			<span class="genre">{{ licence }}</span>
+			{% endfor %}
+		</div>
+		<p>
+			<i class="fas fa-globe-americas"></i> {{ user.enrolment_time }}
+		</p>
+		<p>
+			<i class="fas fa-phone-alt"></i> {% if artist.phone %}{{ artist.phone }}{% else %}No Phone{% endif %}
+        </p>
+	</div>
+	<div class="col-sm-6">
+		<img src="{{ artist.image_link }}" alt="Artist Image" />
+	</div>
+</div>
+<section>
+	<h2 class="monospace">{{ artist.upcoming_shows_count }} Upcoming {% if artist.upcoming_shows_count == 1 %}Show{% else %}Shows{% endif %}</h2>
+	<div class="row">
+		{%for show in artist.upcoming_shows %}
+		<div class="col-sm-4">
+			<div class="tile tile-show">
+				<img src="{{ show.venue_image_link }}" alt="Show Venue Image" />
+				<h5><a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a></h5>
+				<h6>{{ show.start_time|datetime('full') }}</h6>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</section>
+<section>
+	<h2 class="monospace">{{ artist.past_shows_count }} Past {% if artist.past_shows_count == 1 %}Show{% else %}Shows{% endif %}</h2>
+	<div class="row">
+		{%for show in artist.past_shows %}
+		<div class="col-sm-4">
+			<div class="tile tile-show">
+				<img src="{{ show.venue_image_link }}" alt="Show Venue Image" />
+				<h5><a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a></h5>
+				<h6>{{ show.start_time|datetime('full') }}</h6>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</section>
+
+
+{% endblock %}
+
