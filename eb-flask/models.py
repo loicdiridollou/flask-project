@@ -99,14 +99,16 @@ class User(db.Model):
     enrolment_time = db.Column(db.DateTime())
     level = db.Column(db.String(255))
     licences = db.Column(db.String(255))
+    phone = db.Column(db.String(255))
 
 
-    def __init__(self, username, name, enrolment_time, level):
+    def __init__(self, username, name, enrolment_time, level, licences, phone):
         self.username = username
         self.name = name
         self.enrolment_time = enrolment_time
         self.level = level
         self.licences = licences
+        self.phone = phone
 
     def insert(self):
         db.session.add(self)
