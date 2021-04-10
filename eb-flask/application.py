@@ -212,9 +212,10 @@ def users():
 
 
 @application.route('/users/<int:user_id>')
-def show_users(user_id):
+def show_user(user_id):
     user = User.query.filter(User.id == user_id).one_or_none()
     data = {
+        'id': user.id,
         'username': user.username,
         'name': user.name,
         'enrolment_time': user.enrolment_time,
@@ -224,11 +225,26 @@ def show_users(user_id):
     return render_template('pages/show_user.html', user=data)
 
 
+@application.route('/users/<int:user_id>/edit')
+def edit_user(user_id):
+    user = User.query.filter(User.id == user_id).one_or_none()
+    data = {
+        'id': user.id,
+        'username': user.username,
+        'name': user.name,
+        'enrolment_time': user.enrolment_time,
+        'level': user.level,
+        'licences': user.licences.split(',')
+    }
+    return render_template('pages/edit_user.html', user=data)
+
+
+
 
 @application.route('/users/create', methods=['GET'])
 def create_user():
     form = UserForm()
-    return render_template('forms/new_venue.html', form=form)
+    return render_template('forms/new_user.html', form=form)
 
 @application.route('/users/search')
 def search_user():
