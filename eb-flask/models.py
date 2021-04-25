@@ -101,15 +101,21 @@ class User(db.Model):
     level = db.Column(db.String(255))
     licences = db.Column(db.String(255))
     phone = db.Column(db.String(255))
+    city = db.Column(db.String(255))
+    state = db.Column(db.String(255))
 
 
-    def __init__(self, username, name, enrolment_time, level, licences, phone):
+    def __init__(self, username, name, enrolment_time, 
+                 level, licences, phone,
+                 city, state):
         self.username = username
         self.name = name
         self.enrolment_time = enrolment_time
         self.level = level
         self.licences = licences
         self.phone = phone
+        self.city = city
+        self.state = state
 
     def insert(self):
         self.enrolment_time = dt.datetime.now()
