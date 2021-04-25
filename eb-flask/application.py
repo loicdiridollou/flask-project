@@ -226,7 +226,7 @@ def show_user(user_id):
         'licences': user.licences.split(','),
         'phone': phone_format(user.phone)
     }
-    print(data['licences'])
+    print(user.licences)
     return render_template('pages/show_user.html', user=data)
 
 
@@ -242,7 +242,7 @@ def edit_user(user_id):
         'licences': user.licences.split(',')
     }
     print(data['licences'])
-    return render_template('pages/edit_user.html', user=data)
+    return render_template('forms/edit_user.html', user=data)
 
 
 
