@@ -2,6 +2,7 @@ import os
 from sqlalchemy import Column, String, Integer, create_engine
 from flask_sqlalchemy import SQLAlchemy
 import json
+import datetime as dt
 
 database_name = ""
 #database_path ="postgres://{}:{}@{}/{}".format('postgres', 'postgres','flask-db.csljbjej7s5s.us-west-2.rds.amazonaws.com', database_name)
@@ -111,6 +112,7 @@ class User(db.Model):
         self.phone = phone
 
     def insert(self):
+        self.enrolment_time = dt.datetime.now()
         db.session.add(self)
         db.session.commit()
     
