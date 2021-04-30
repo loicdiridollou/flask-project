@@ -3,3 +3,4 @@ __pycache__/
 venv/
 migrations/
 .vscode/
+.DS_Store
