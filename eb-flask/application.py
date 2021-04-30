@@ -18,11 +18,11 @@ def reset_db():
     db.drop_all()
     db.create_all()
     
-    db.session.add(Vehicle(brand="Ferrari", model="F458", doors=3, vehicle_type="car"))
-    db.session.add(Vehicle(brand="Porsche", model="918 Spyder", doors=3, vehicle_type="car"))
-    db.session.add(Vehicle(brand="Citroën", model="C4 Picasso", doors=5, vehicle_type="car"))
-    db.session.add(Vehicle(brand="Volvo", model="XNR Electric", doors=2, vehicle_type="truck"))
-    db.session.add(Vehicle(brand="Freightliner", model="eCascadia", doors=2, vehicle_type="truck"))
+    db.session.add(Vehicle(brand="Ferrari", model="F458", doors=3, vtype="car"))
+    db.session.add(Vehicle(brand="Porsche", model="918 Spyder", doors=3, vtype="car"))
+    db.session.add(Vehicle(brand="Citroën", model="C4 Picasso", doors=5, vtype="car"))
+    db.session.add(Vehicle(brand="Volvo", model="XNR Electric", doors=2, vtype="truck"))
+    db.session.add(Vehicle(brand="Freightliner", model="eCascadia", doors=2, vtype="truck"))
 
     u1 = User(username="jean_dupont", name="Jean Dupont", enrolment_time=dt.datetime(2020, 1, 5, 12, 30), level="manager")
     u2 = User(username="marc_lhermitte", name="Marc L'Hermitte", enrolment_time=dt.datetime(2020, 1, 5, 12, 30), level="employee")
