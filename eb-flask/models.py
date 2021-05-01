@@ -33,7 +33,7 @@ class Vehicle(db.Model):
     vtype = db.Column(db.String(255))
     category = db.Column(db.String(255))    
 
-    def __init__(self, brand, model, doors, vtype, year, power, licence, transmission, category):
+    def __init__(self, brand, model, doors, vtype='Sedan', year=2021, power=200, licence='Car,Motorcycle', transmission=7, category='car'):
         self.brand = brand
         self.model = model
         self.doors = doors
@@ -106,8 +106,8 @@ class User(db.Model):
 
 
     def __init__(self, username, name, enrolment_time, 
-                 level, licences, phone,
-                 city, state):
+                 level, licences='car', phone='000-000-0000',
+                 city='New York', state='NY'):
         self.username = username
         self.name = name
         self.enrolment_time = enrolment_time
