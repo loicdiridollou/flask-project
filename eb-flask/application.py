@@ -18,7 +18,7 @@ def reset_db():
     db.drop_all()
     db.create_all()
     
-    db.session.add(Vehicle(brand="Ferrari", model="F458", doors=3, vtype="car"))
+    db.session.add(Vehicle(brand="Ferrari", model="F458", doors=3, power=200, year=2000, licence='Car', transmission=8, vtype='Sportcar', category='car'))
     db.session.add(Vehicle(brand="Porsche", model="918 Spyder", doors=3, vtype="car"))
     db.session.add(Vehicle(brand="Citroën", model="C4 Picasso", doors=5, vtype="car"))
     db.session.add(Vehicle(brand="Volvo", model="XNR Electric", doors=2, vtype="truck"))
