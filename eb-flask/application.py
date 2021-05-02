@@ -210,8 +210,6 @@ def users():
     users = User.query.all()
     return render_template('pages/users.html', users=users)
 
-def phone_format(n):                                                                                                                                  
-    return format(int(n[:-1]), ",").replace(",", "-") + n[-1]     
 
 @application.route('/users/<int:user_id>')
 def show_user(user_id):
@@ -224,26 +222,30 @@ def show_user(user_id):
         'enrolment_time': user.enrolment_time,
         'level': user.level,
         'licences': user.licences.split(','),
-        'phone': phone_format(user.phone)
+        'phone': user.phone,
+        'photo': user.photo
     }
-    print(user.licences)
+    
     return render_template('pages/show_user.html', user=data)
 
 
-@application.route('/users/<int:user_id>/edit')
+@application.route('/users/<int:user_id>/edit', method=['GET', 'PATCH'])
 def edit_user(user_id):
-    user = User.query.filter(User.id == user_id).one_or_none()
-    data = {
-        'id': user.id,
-        'username': user.username,
-        'name': user.name,
-        'enrolment_time': user.enrolment_time,
-        'level': user.level,
-        'licences': user.licences.split(',')
-    }
-    print(data['licences'])
-    return render_template('forms/edit_user.html', user=data)
+    if request.method == 'GET':
+        form = UserForm()
+        user = User.query.filter(User.id == user_id).one_or_none()
+        data = {
+            'id': user.id,
+            'username': user.username,
+            'name': user.name,
+            'enrolment_time': user.enrolment_time,
+            'level': user.level,
+            'licences': user.licences.split(','),
+            'photo': user.photo
+        }
 
+        return render_template('forms/edit_user.html', form=form, user=data)
+    elif request.method == 'PATCH'
 
 
 @application.route('/users/create', methods=['GET', 'POST'])
