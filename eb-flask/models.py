@@ -103,11 +103,13 @@ class User(db.Model):
     phone = db.Column(db.String(255))
     city = db.Column(db.String(255))
     state = db.Column(db.String(255))
+    photo = db.Column(db.String(1000))
 
 
     def __init__(self, username, name, enrolment_time, 
                  level, licences='car', phone='000-000-0000',
-                 city='New York', state='NY'):
+                 city='New York', state='NY', 
+                 photo="https://www.montgomerysummit.com/wp-content/uploads/carmine-di-sibio.jpg"):
         self.username = username
         self.name = name
         self.enrolment_time = enrolment_time
@@ -116,6 +118,7 @@ class User(db.Model):
         self.phone = phone
         self.city = city
         self.state = state
+        self.photo = photo
 
     def insert(self):
         self.enrolment_time = dt.datetime.now()
