@@ -9,4 +9,4 @@ clean:
 	rm -rf venv
 
 lint:
-	pylint *.py
+	pylint *.pyc
