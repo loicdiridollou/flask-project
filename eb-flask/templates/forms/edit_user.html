@@ -3,7 +3,7 @@
 {% block content %}
   <div class="form-wrapper">
     <form method="post" class="form" id = "form">
-      <h3 class="form-heading">List a new user</h3>
+      <h3 class="form-heading">Edit a new user</h3>
       <div class="form-group">
         <label for="name">Name</label>
         {{ form.name(class_ = 'form-control', autofocus = true, value=user.name) }}
@@ -29,7 +29,7 @@
         <label for="image">Image Link</label>
         {{ form.image_link(class_ = 'form-control', placeholder='http://', autofocus = true, value=user.photo) }}
       </div>
-      <input type="submit" value="Create User" class="btn btn-primary btn-lg btn-block">
+      <input type="submit" value="Edit User" class="btn btn-primary btn-lg btn-block">
     </form>
   </div>
 {% endblock %}
