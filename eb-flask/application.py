@@ -229,7 +229,7 @@ def show_user(user_id):
     return render_template('pages/show_user.html', user=data)
 
 
-@application.route('/users/<int:user_id>/edit', method=['GET', 'PATCH'])
+@application.route('/users/<int:user_id>/edit', methods=['GET', 'POST'])
 def edit_user(user_id):
     if request.method == 'GET':
         form = UserForm()
@@ -245,7 +245,9 @@ def edit_user(user_id):
         }
 
         return render_template('forms/edit_user.html', form=form, user=data)
-    elif request.method == 'PATCH'
+    elif request.method == 'POST':
+        body = request.form
+        return redirect(url_for('show_user', user_id=user_id))
 
 
 @application.route('/users/create', methods=['GET', 'POST'])
