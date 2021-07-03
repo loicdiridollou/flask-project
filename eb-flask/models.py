@@ -1,11 +1,9 @@
-import os
 from sqlalchemy import Column, String, Integer, create_engine
 from flask_sqlalchemy import SQLAlchemy
-import json
 import datetime as dt
 
-database_name = ""
-database_path ="postgresql+psycopg2://{}:{}@{}/{}".format('flask', 'Mypass1234_$*','flask-app.csljbjej7s5s.us-west-2.rds.amazonaws.com', database_name)
+database_name = "main_db"
+database_path ="postgresql+psycopg2://{}:{}@{}/{}".format('postgres', 'postgres','flask-app.csljbjej7s5s.us-west-2.rds.amazonaws.com', database_name)
 #database_path = 'mysql+pymysql://flask:Mypass1234_$*@localhost/flask_tutorial'
 
 db = SQLAlchemy()
