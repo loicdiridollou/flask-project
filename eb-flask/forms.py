@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask_wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField
-from wtforms.validators import DataRequired, AnyOf, URL
+from wtforms.validators import DataRequired
 
 class UtilizationForm(Form):
     artist_id = StringField(
@@ -68,7 +68,7 @@ class VehicleForm(Form):
             ('motorcycle', 'Motorcycle')
         ]
     )
-    
+
 
 class UserForm(Form):
     name = StringField(
@@ -89,7 +89,6 @@ class UserForm(Form):
         'image_link'
     )
     licences = SelectMultipleField(
-        # TODO implement enum restriction
         'licences', validators=[DataRequired()],
         choices=[
             ('Motorcycle', 'Motorcycle'),

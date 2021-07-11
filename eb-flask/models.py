@@ -1,14 +1,19 @@
-from sqlalchemy import Column, String, Integer, create_engine
-from flask_sqlalchemy import SQLAlchemy
 import datetime as dt
+from flask_sqlalchemy import SQLAlchemy
 
-database_name = "main_db"
-database_path ="postgresql+psycopg2://{}:{}@{}/{}".format('postgres', 'postgres','flask-app.csljbjej7s5s.us-west-2.rds.amazonaws.com', database_name)
-#database_path = 'mysql+pymysql://flask:Mypass1234_$*@localhost/flask_tutorial'
+DATABASE_NAME = "main_db"
+DATABASE_PATH = "postgresql+psycopg2://{}:{}@{}/{}".format(
+    'postgres',
+    'postgres',
+    'flask-app.csljbjej7s5s.us-west-2.rds.amazonaws.com',
+    DATABASE_NAME
+)
+
 
 db = SQLAlchemy()
 
-def setup_db(app, database_path=database_path):
+
+def setup_db(app, database_path=DATABASE_PATH):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
@@ -29,9 +34,12 @@ class Vehicle(db.Model):
     licence = db.Column(db.String(255))
     transmission = db.Column(db.Integer())
     vtype = db.Column(db.String(255))
-    category = db.Column(db.String(255))    
+    category = db.Column(db.String(255))
 
-    def __init__(self, brand, model, doors, vtype='Sedan', year=2021, power=200, licence='Car,Motorcycle', transmission=7, category='car'):
+    def __init__(self, brand, model, doors,
+                 vtype='Sedan', year=2021, power=200,
+                 licence='Car,Motorcycle', transmission=7,
+                 category='car'):
         self.brand = brand
         self.model = model
         self.doors = doors
@@ -45,7 +53,7 @@ class Vehicle(db.Model):
     def insert(self):
         db.session.add(self)
         db.session.commit()
-    
+
     def update(self):
         db.session.commit()
 
@@ -67,7 +75,6 @@ class Utilization(db.Model):
     end_time = db.Column(db.DateTime())
 
     user = db.relationship('User', backref="user", lazy=True)
-    
 
     def __init__(self, ref_vehicle, start_time, end_time):
         self.ref_vehicle = ref_vehicle
@@ -77,7 +84,7 @@ class Utilization(db.Model):
     def insert(self):
         db.session.add(self)
         db.session.commit()
-    
+
     def update(self):
         db.session.commit()
 
@@ -103,10 +110,9 @@ class User(db.Model):
     state = db.Column(db.String(255))
     photo = db.Column(db.String(1000))
 
-
-    def __init__(self, username, name, enrolment_time, 
+    def __init__(self, username, name, enrolment_time,
                  level, licences='car', phone='000-000-0000',
-                 city='New York', state='NY', 
+                 city='New York', state='NY',
                  photo="https://www.montgomerysummit.com/wp-content/uploads/carmine-di-sibio.jpg"):
         self.username = username
         self.name = name
@@ -122,7 +128,7 @@ class User(db.Model):
         self.enrolment_time = dt.datetime.now()
         db.session.add(self)
         db.session.commit()
-    
+
     def update(self):
         db.session.commit()
 

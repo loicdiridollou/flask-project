@@ -1,15 +1,15 @@
 import datetime as dt
 from flask import Flask, render_template, request, redirect, url_for, jsonify, abort
-from flask_migrate import Migrate
-from models import Vehicle, Utilization, User, setup_db
+# from flask_migrate import Migrate
 from forms import VehicleForm, UserForm
+from models import Vehicle, Utilization, User, setup_db # pylint: disable=wrong-import-order
 
 
 application = Flask(__name__)
 db = setup_db(application)
 application.config.from_object('config')
 
-migrate = Migrate(application, db)
+# migrate = Migrate(application, db)
 
 
 @application.cli.command("initdb")
@@ -32,13 +32,13 @@ def reset_db():
                    model="eCascadia", doors=2, vtype="truck"))
 
     ut1 = User(username="jean_dupont", name="Jean Dupont",
-              enrolment_time=dt.datetime(2020, 1, 5, 12, 30), level="manager")
+               enrolment_time=dt.datetime(2020, 1, 5, 12, 30), level="manager")
     ut2 = User(username="marc_lhermitte", name="Marc L'Hermitte",
-              enrolment_time=dt.datetime(2020, 1, 5, 12, 30), level="employee")
+               enrolment_time=dt.datetime(2020, 1, 5, 12, 30), level="employee")
     ut3 = User(username="jeanmichel_serre", name="Jean-Michel Serre",
-              enrolment_time=dt.datetime(2020, 1, 5, 12, 30), level="manager")
+               enrolment_time=dt.datetime(2020, 1, 5, 12, 30), level="manager")
     ut4 = User(username="kevin_chan", name="Kevin Chan",
-              enrolment_time=dt.datetime(2020, 1, 5, 12, 30), level="employee")
+               enrolment_time=dt.datetime(2020, 1, 5, 12, 30), level="employee")
     db.session.add(ut1)
     db.session.add(ut2)
     db.session.add(ut3)
@@ -185,6 +185,7 @@ def update_cars(vehicle_id):
 
 @application.route('/vehicles/<int:vehicle_id>', methods=["DELETE"])
 def delete_vehicle(vehicle_id):
+    """ docstring """
     error = False
     try:
         vehicle = Vehicle.query.filter(Vehicle.id == vehicle_id).one()
@@ -262,7 +263,6 @@ def edit_user(user_id):
         action = render_template('forms/edit_user.html', form=form, user=data)
 
     elif request.method == 'POST':
-        #body = request.form
         action = redirect(url_for('show_user', user_id=user_id))
 
     return action
@@ -286,6 +286,7 @@ def create_user():
         user.insert()
         action = redirect(url_for('show_user', user_id=user.id))
     return action
+
 
 @application.route('/users/search')
 def search_user():
