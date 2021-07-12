@@ -26,3 +26,6 @@ jobs:
     - name: Lint with pylint
       run: |
         pylint ./eb-flask/*.py
+    - name: Test with pytest
+      run: |
+        pytest ./eb-flask/
