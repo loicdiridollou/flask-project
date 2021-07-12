@@ -1,8 +1,7 @@
 import datetime as dt
 from flask import Flask, render_template, request, redirect, url_for, jsonify, abort
-# from flask_migrate import Migrate
 from forms import VehicleForm, UserForm
-from models import Vehicle, Utilization, User, setup_db # pylint: disable=wrong-import-order
+from models import Vehicle, Utilization, User, setup_db
 
 
 application = Flask(__name__)
