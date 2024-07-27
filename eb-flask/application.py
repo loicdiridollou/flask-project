@@ -1,8 +1,10 @@
 """Main module with all the application code."""
 
 import datetime as dt
+import os
 
 from flask import Flask, abort, jsonify, redirect, render_template, request, url_for
+from flask_migrate import Migrate
 
 from forms import UserForm, VehicleForm
 from models import User, Utilization, Vehicle, setup_db
@@ -11,7 +13,8 @@ application = Flask(__name__)
 db = setup_db(application)
 application.config.from_object("config")
 
-# migrate = Migrate(application, db)
+if os.environ.get("FLASK_MIGRATE", False):
+    migrate = Migrate(application, db)
 
 
 @application.cli.command("initdb")

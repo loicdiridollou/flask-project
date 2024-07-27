@@ -16,6 +16,7 @@ requires-python = ">=3.10"
 license = {text = "MIT"}
 dependencies = [
   "flask",
+  "flask_migrate",
   "flask_sqlalchemy",
   "flask_wtf",
   "psycopg2",
