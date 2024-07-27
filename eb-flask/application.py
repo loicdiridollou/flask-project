@@ -16,9 +16,7 @@ application.config.from_object("config")
 
 @application.cli.command("initdb")
 def reset_db():
-    """
-    Doing this
-    """
+    """Reset database configuration."""
     db.drop_all()
     db.create_all()
 
@@ -105,6 +103,7 @@ def reset_db():
 
 @application.route("/")
 def index():
+    """Render index template."""
     return render_template("pages/home.html")
 
 
@@ -115,6 +114,7 @@ def index():
 
 @application.route("/vehicles")
 def vehicles():
+    """Query and display all vehicles."""
     vecs = Vehicle.query.all()
 
     return render_template("pages/vehicles.html", vehicles=vecs)
@@ -122,6 +122,7 @@ def vehicles():
 
 @application.route("/vehicles/<int:vehicle_id>")
 def vehicle_by_id(vehicle_id):
+    """Query and display vehicle by id."""
     vehicle = Vehicle.query.filter(Vehicle.id == vehicle_id).one()
     vehicle_dic = {
         "id": vehicle.id,
@@ -139,6 +140,7 @@ def vehicle_by_id(vehicle_id):
 
 @application.route("/vehicles/type/<string:vehicle_type>")
 def vehicles_by_type(vehicle_type):
+    """Query and display vehicle by type."""
     vehicles = Vehicle.query.filter(Vehicle.vtype == vehicle_type).all()
     dic = {}
     for vehicle in vehicles:
@@ -153,12 +155,14 @@ def vehicles_by_type(vehicle_type):
 
 @application.route("/vehicles/create", methods=["GET"])
 def create_vehicle_form():
+    """Create a new vehicle."""
     form = VehicleForm()
     return render_template("forms/new_vehicle.html", form=form)
 
 
 @application.route("/vehicles/create", methods=["POST"])
 def add_cars():
+    """Add new vehicle in the database."""
     body = request.form
     try:
         vehicle = Vehicle(
@@ -182,6 +186,7 @@ def add_cars():
 
 @application.route("/vehicles/<int:vehicle_id>/edit", methods=["GET"])
 def edit_vehicle_form(vehicle_id):
+    """Load vehicle from the database and display the values in the form."""
     form = VehicleForm()
     vehicle = Vehicle.query.filter(Vehicle.id == vehicle_id).one()
     vehicle_dic = {
@@ -201,6 +206,7 @@ def edit_vehicle_form(vehicle_id):
 
 @application.route("/vehicles/<int:vehicle_id>/edit", methods=["POST"])
 def update_cars(vehicle_id):
+    """Update car in the database."""
     body = request.form
 
     try:
@@ -233,13 +239,13 @@ def update_cars(vehicle_id):
 
 @application.route("/vehicles/<int:vehicle_id>", methods=["DELETE"])
 def delete_vehicle(vehicle_id):
-    """Docstring"""
+    """Delete vehicle from the database."""
     error = False
     try:
         vehicle = Vehicle.query.filter(Vehicle.id == vehicle_id).one()
         db.session.delete(vehicle)
         db.session.commit()
-    except ():
+    except:
         db.session.rollback()
         error = True
     finally:
@@ -257,6 +263,7 @@ def delete_vehicle(vehicle_id):
 
 @application.route("/utilizations")
 def utilizations():
+    """Query and display all utilizations."""
     utilizations = Utilization.query.all()
     dic = {}
     for use in utilizations:
