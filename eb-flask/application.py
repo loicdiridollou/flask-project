@@ -74,7 +74,7 @@ def reset_db():
         start_time=dt.datetime(2020, 6, 5, 12, 30),
         end_time=dt.datetime(2020, 6, 6, 12, 30),
     )
-    util1.user = ut2
+    util1.user_id = ut2
     db.session.add(util1)
 
     util2 = Utilization(
@@ -82,7 +82,7 @@ def reset_db():
         start_time=dt.datetime(2020, 6, 6, 12, 30),
         end_time=dt.datetime(2020, 6, 8, 12, 30),
     )
-    util2.user = ut3
+    util2.user_id = ut3
     db.session.add(util2)
 
     util3 = Utilization(
@@ -90,7 +90,7 @@ def reset_db():
         start_time=dt.datetime(2020, 6, 8, 12, 30),
         end_time=dt.datetime(2020, 6, 9, 12, 30),
     )
-    util3.user = ut1
+    util3.user_id = ut1
     db.session.add(util3)
 
     db.session.commit()
@@ -267,13 +267,15 @@ def utilizations():
     utilizations = Utilization.query.all()
     dic = {}
     for use in utilizations:
-        user = User.query.filter(User.id == use.user_id).one_or_none()
-        dic[use.id] = {
-            "vehicle": use.ref_vehicle,
-            "user": user.username,
-            "start_time": use.start_time,
-            "end_time": use.end_time,
-        }
+        if user := User.query.filter(User.id == use.user_id).one_or_none():
+            dic[use.id] = {
+                "vehicle": use.ref_vehicle,
+                "user": user.username,
+                "start_time": use.start_time,
+                "end_time": use.end_time,
+            }
+        else:
+            print(f"Utilization {use} not found")
     return jsonify(dic)
 
 
@@ -284,33 +286,15 @@ def utilizations():
 
 @application.route("/users")
 def users():
+    """Query and display all users."""
     users = User.query.all()
     return render_template("pages/users.html", users=users)
 
 
 @application.route("/users/<int:user_id>")
 def show_user(user_id):
-    user = User.query.filter(User.id == user_id).one_or_none()
-
-    data = {
-        "id": user.id,
-        "username": user.username,
-        "name": user.name,
-        "enrolment_time": user.enrolment_time,
-        "level": user.level,
-        "licences": user.licences.split(","),
-        "phone": user.phone,
-        "photo": user.photo,
-    }
-
-    return render_template("pages/show_user.html", user=data)
-
-
-@application.route("/users/<int:user_id>/edit", methods=["GET", "POST"])
-def edit_user(user_id):
-    if request.method == "GET":
-        form = UserForm()
-        user = User.query.filter(User.id == user_id).one_or_none()
+    """Query and display user by id."""
+    if user := User.query.filter(User.id == user_id).one_or_none():
         data = {
             "id": user.id,
             "username": user.username,
@@ -318,19 +302,45 @@ def edit_user(user_id):
             "enrolment_time": user.enrolment_time,
             "level": user.level,
             "licences": user.licences.split(","),
+            "phone": user.phone,
             "photo": user.photo,
         }
+    else:
+        raise Exception(f"User {user_id} not found")
 
+    return render_template("pages/show_user.html", user=data)
+
+
+@application.route("/users/<int:user_id>/edit", methods=["GET", "POST"])
+def edit_user(user_id):
+    """Edit user."""
+    if request.method == "GET":
+        form = UserForm()
+        if user := User.query.filter(User.id == user_id).one_or_none():
+            data = {
+                "id": user.id,
+                "username": user.username,
+                "name": user.name,
+                "enrolment_time": user.enrolment_time,
+                "level": user.level,
+                "licences": user.licences.split(","),
+                "photo": user.photo,
+            }
+        else:
+            raise Exception(f"User {user_id} not found")
         action = render_template("forms/edit_user.html", form=form, user=data)
 
     elif request.method == "POST":
         action = redirect(url_for("show_user", user_id=user_id))
+    else:
+        raise Exception(f"Method {request.method} not supported")
 
     return action
 
 
 @application.route("/users/create", methods=["GET", "POST"])
 def create_user():
+    """Create new user in the database."""
     if request.method == "GET":
         form = UserForm()
         action = render_template("forms/new_user.html", form=form)
@@ -343,24 +353,29 @@ def create_user():
             enrolment_time=body.get("enrolment_time", None),
             level=body.get("level", None),
             licences=",".join(request.form.getlist("licences")),
-            phone=body.get("phone", None),
+            phone=body.get("phone", ""),
         )
 
         user.insert()
         action = redirect(url_for("show_user", user_id=user.id))
+    else:
+        raise Exception(f"Method {request.method} not supported")
+
     return action
 
 
 @application.route("/users/search")
 def search_user():
+    """Search for user in the database."""
     dic = {}
     return jsonify(dic)
 
 
 @application.route("/render")
 def render_temp():
+    """Render index template."""
     return render_template("index.html")
 
 
 if __name__ == "__main__":
-    application.run(host="0.0.0.0", port="5000")
+    application.run(host="0.0.0.0", port=5000)
