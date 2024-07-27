@@ -59,15 +59,16 @@ ignore = [
 ]
 
 select = [
+    "A",
+    "B",
+    "D",
     "E",
     "F",
-    "W",
-    "B",
     "I",
-    "A",
     "PLC",
+    "PTH",
     "UP",
-    "D",
+    "W",
 ]
 
 pydocstyle.convention = "numpy"

@@ -1,3 +1,5 @@
+"""Module with the code for all forms."""
+
 from datetime import datetime
 
 from flask_wtf import Form
@@ -6,6 +8,8 @@ from wtforms.validators import DataRequired
 
 
 class UtilizationForm(Form):
+    """Utilization form class."""
+
     artist_id = StringField("artist_id")
     venue_id = StringField("venue_id")
     start_time = DateTimeField(
@@ -14,6 +18,8 @@ class UtilizationForm(Form):
 
 
 class VehicleForm(Form):
+    """Vehicle form class."""
+
     brand = StringField("brand", validators=[DataRequired()])
     model = StringField("model", validators=[DataRequired()])
     year = SelectField(
@@ -58,6 +64,8 @@ class VehicleForm(Form):
 
 
 class UserForm(Form):
+    """User form class."""
+
     name = StringField("name", validators=[DataRequired()])
     username = StringField("city", validators=[DataRequired()])
     level = SelectField(
