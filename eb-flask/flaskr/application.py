@@ -5,7 +5,6 @@ import os
 
 from flask import Flask, abort, jsonify, redirect, render_template, request, url_for
 from flask_migrate import Migrate
-
 from forms import UserForm, VehicleForm
 from models import User, Utilization, Vehicle, setup_db
 
